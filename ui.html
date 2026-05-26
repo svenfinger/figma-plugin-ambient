@@ -1,0 +1,172 @@
+<style>
+  body {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 11px;
+    margin: 0;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  button {
+    height: 32px;
+    border-radius: 6px;
+    border: none;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  #toggle {
+    background: #18A0FB;
+    color: #fff;
+  }
+  #reset {
+    background: transparent;
+    border: 1px solid #e5e5e5;
+    color: #333;
+  }
+  .checkbox-field {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .checkbox-field input[type="checkbox"] {
+    width: 12px;
+    height: 12px;
+    margin: 0;
+    cursor: pointer;
+  }
+  .checkbox-field label {
+    color: #333;
+    cursor: pointer;
+  }
+  .colors {
+    display: flex;
+    gap: 8px;
+  }
+  .color-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .color-field label {
+    color: #999;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .color-input {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    padding: 4px 6px;
+  }
+  .color-input input[type="color"] {
+    width: 20px;
+    height: 20px;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .color-input input[type="text"] {
+    border: none;
+    outline: none;
+    font-size: 11px;
+    font-family: monospace;
+    width: 100%;
+  }
+</style>
+
+<button id="toggle">Toggle page backgrounds</button>
+
+<div class="checkbox-field">
+  <input type="checkbox" id="current-page-only">
+  <label for="current-page-only">Apply only to current page</label>
+</div>
+
+<div class="colors">
+  <div class="color-field">
+    <label>Light</label>
+    <div class="color-input">
+      <input type="color" id="light-picker" value="#F5F5F5">
+      <input type="text" id="light-hex" value="#F5F5F5" maxlength="7">
+    </div>
+  </div>
+  <div class="color-field">
+    <label>Dark</label>
+    <div class="color-input">
+      <input type="color" id="dark-picker" value="#1E1E1E">
+      <input type="text" id="dark-hex" value="#1E1E1E" maxlength="7">
+    </div>
+  </div>
+</div>
+
+<button id="reset">Reset to defaults</button>
+
+<script>
+  const DEFAULT_LIGHT = "#F5F5F5";
+  const DEFAULT_DARK = "#1E1E1E";
+
+  const lightPicker = document.getElementById("light-picker");
+  const lightHex = document.getElementById("light-hex");
+  const darkPicker = document.getElementById("dark-picker");
+  const darkHex = document.getElementById("dark-hex");
+
+  lightPicker.oninput = () => {
+    lightHex.value = lightPicker.value.toUpperCase();
+    saveColors();
+  };
+  lightHex.onchange = () => {
+    if (/^#[0-9A-Fa-f]{6}$/.test(lightHex.value)) {
+      lightPicker.value = lightHex.value;
+      lightHex.value = lightHex.value.toUpperCase();
+      saveColors();
+    }
+  };
+  darkPicker.oninput = () => {
+    darkHex.value = darkPicker.value.toUpperCase();
+    saveColors();
+  };
+  darkHex.onchange = () => {
+    if (/^#[0-9A-Fa-f]{6}$/.test(darkHex.value)) {
+      darkPicker.value = darkHex.value;
+      darkHex.value = darkHex.value.toUpperCase();
+      saveColors();
+    }
+  };
+
+  function saveColors() {
+    parent.postMessage({ pluginMessage: {
+      type: "save-colors",
+      light: lightPicker.value,
+      dark: darkPicker.value
+    }}, "*");
+  }
+
+  document.getElementById("toggle").onclick = () => {
+    const currentPageOnly = document.getElementById("current-page-only").checked;
+    parent.postMessage({ pluginMessage: { type: "toggle", currentPageOnly } }, "*");
+  };
+
+  document.getElementById("reset").onclick = () => {
+    lightPicker.value = DEFAULT_LIGHT;
+    lightHex.value = DEFAULT_LIGHT;
+    darkPicker.value = DEFAULT_DARK;
+    darkHex.value = DEFAULT_DARK;
+    saveColors();
+  };
+
+  onmessage = (event) => {
+    const msg = event.data.pluginMessage;
+    if (msg && msg.type === "init-colors") {
+      lightPicker.value = msg.light;
+      lightHex.value = msg.light.toUpperCase();
+      darkPicker.value = msg.dark;
+      darkHex.value = msg.dark.toUpperCase();
+    }
+  };
+</script>
