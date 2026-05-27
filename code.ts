@@ -1,5 +1,3 @@
-figma.showUI(__html__, { width: 240, height: 200 });
-
 const DEFAULT_LIGHT = "#F5F5F5";
 const DEFAULT_DARK = "#1E1E1E";
 
@@ -26,20 +24,7 @@ async function getColors(): Promise<{ light: string; dark: string }> {
   return { light, dark };
 }
 
-(async () => {
-  const colors = await getColors();
-  figma.ui.postMessage({ type: "init-colors", light: colors.light, dark: colors.dark });
-})();
-
-figma.ui.onmessage = async (msg) => {
-  if (msg.type === "save-colors") {
-    await figma.clientStorage.setAsync("lightColor", msg.light);
-    await figma.clientStorage.setAsync("darkColor", msg.dark);
-    return;
-  }
-
-  if (msg.type !== "toggle") return;
-
+async function toggleBackground(currentPageOnly: boolean): Promise<void> {
   const { light, dark } = await getColors();
   const lightRgb = hexToRgb(light);
   const darkRgb = hexToRgb(dark);
@@ -61,7 +46,7 @@ figma.ui.onmessage = async (msg) => {
   const nextColor = nextMode === "dark" ? darkRgb : lightRgb;
   const nextBackground: SolidPaint = { type: "SOLID", color: nextColor };
 
-  if (msg.currentPageOnly) {
+  if (currentPageOnly) {
     figma.currentPage.backgrounds = [nextBackground];
   } else {
     for (const page of figma.root.children) {
@@ -71,6 +56,49 @@ figma.ui.onmessage = async (msg) => {
   }
 
   await figma.clientStorage.setAsync("lastApplied", nextMode);
-  const scope = msg.currentPageOnly ? "current page" : "all pages";
+  const scope = currentPageOnly ? "current page" : "all pages";
   figma.notify(`Set ${scope} background to ${nextMode}`);
-};
+}
+
+function runSettings(): void {
+  figma.showUI(__html__, { width: 240, height: 183 });
+
+  (async () => {
+    const colors = await getColors();
+    const currentPageOnly = await figma.clientStorage.getAsync("currentPageOnly") === true;
+    figma.ui.postMessage({
+      type: "init",
+      light: colors.light,
+      dark: colors.dark,
+      currentPageOnly,
+    });
+  })();
+
+  figma.ui.onmessage = async (msg) => {
+    if (msg.type === "save-colors") {
+      await figma.clientStorage.setAsync("lightColor", msg.light);
+      await figma.clientStorage.setAsync("darkColor", msg.dark);
+      return;
+    }
+
+    if (msg.type === "save-scope") {
+      await figma.clientStorage.setAsync("currentPageOnly", msg.currentPageOnly);
+      return;
+    }
+
+    if (msg.type !== "toggle") return;
+
+    await figma.clientStorage.setAsync("currentPageOnly", msg.currentPageOnly);
+    await toggleBackground(msg.currentPageOnly);
+  };
+}
+
+if (figma.command === "toggle") {
+  (async () => {
+    const currentPageOnly = await figma.clientStorage.getAsync("currentPageOnly") === true;
+    await toggleBackground(currentPageOnly);
+    figma.closePlugin();
+  })();
+} else {
+  runSettings();
+}

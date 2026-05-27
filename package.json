@@ -1,7 +1,7 @@
 {
-  "name": "figma-page-background-toggle",
+  "name": "figma-plugin-ambient",
   "version": "1.0.0",
-  "description": "Toggle page backgrounds between light and dark mode",
+  "description": "Toggle Figma page backgrounds between light and dark mode",
   "main": "code.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",

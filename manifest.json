@@ -1,5 +1,5 @@
 {
-  "name": "Page Background Toggle",
+  "name": "Ambient",
   "id": "1641224666051612052",
   "api": "1.0.0",
   "main": "code.js",
@@ -10,5 +10,10 @@
   "editorType": ["figma"],
   "networkAccess": {
     "allowedDomains": ["none"]
-  }
+  },
+  "menu": [
+    { "name": "Toggle page background", "command": "toggle" },
+    { "separator": true },
+    { "name": "Settings…", "command": "settings" }
+  ]
 }
