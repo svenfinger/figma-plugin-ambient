@@ -61,7 +61,7 @@ async function toggleBackground(currentPageOnly: boolean): Promise<void> {
 }
 
 function runSettings(): void {
-  figma.showUI(__html__, { width: 240, height: 183 });
+  figma.showUI(__html__, { width: 262, height: 241, themeColors: true });
 
   (async () => {
     const colors = await getColors();

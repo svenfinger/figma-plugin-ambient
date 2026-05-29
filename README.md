@@ -5,10 +5,10 @@ A Figma plugin that toggles page background colors between light and dark mode w
 ## Features
 
 - **One-click toggle** between light and dark page backgrounds
-- **Quick action** — toggle without opening the plugin UI (from Quick Actions or the plugin submenu)
-- **Custom colors** — configure your own light and dark values via color pickers
-- **Per-page or all pages** — apply to the current page only or every page in the file
-- **Persistent settings** — your chosen colors and scope preference are remembered across sessions
+- **Quick action** to toggle without opening the plugin UI (from Quick Actions or the plugin submenu)
+- **Custom colors** to configure light and dark values via color pickers
+- **Per-page or all pages** to apply to the current page only or every page in the file
+- **Persistent settings** to your chosen colors and scope preference are remembered across sessions
 
 ## Usage
 
@@ -49,6 +49,8 @@ npm install
 ```bash
 npm run build
 ```
+
+This compiles `code.ts` and bundles the UI with [Vite](https://vite.dev/) + [vite-plugin-singlefile](https://github.com/richardtallent/vite-plugin-singlefile) (the usual Figma plugin pattern: one self-contained HTML file). UI source lives in `ui/` and uses [FigUI3](https://github.com/rogie/figui3) (`import "@rogieking/figui3/fig.css"` and `fig.js` in `ui/main.ts`). Output: `dist/index.html` (see `manifest.json`).
 
 ### Watch
 

@@ -10,5 +10,6 @@
     "types": [
       "plugin-typings"
     ]
-  }
+  },
+  "include": ["code.ts"]
 }

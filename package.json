@@ -4,10 +4,12 @@
   "description": "Toggle Figma page backgrounds between light and dark mode",
   "main": "code.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "npm run build:ui && tsc -p tsconfig.json",
+    "build:ui": "vite build",
+    "postinstall": "npm run build:ui",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "watch": "npm run build -- --watch",
+    "watch": "npm run build && concurrently -k \"tsc -p tsconfig.json --watch\" \"vite build --watch\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sven Finger",
@@ -16,8 +18,19 @@
     "@eslint/js": "^9.39.4",
     "@figma/eslint-plugin-figma-plugins": "*",
     "@figma/plugin-typings": "^1.127.0",
+    "concurrently": "^9.2.1",
     "eslint": "^9.39.4",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.57.1"
+    "typescript-eslint": "^8.57.1",
+    "vite": "^7.3.1",
+    "vite-plugin-singlefile": "^2.3.0"
+  },
+  "dependencies": {
+    "@rogieking/figui3": "^4.15.9"
+  },
+  "overrides": {
+    "@rogieking/figui3": {
+      "typescript": "$typescript"
+    }
   }
 }

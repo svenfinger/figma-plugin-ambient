@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <fig-field>
+      <fig-button id="toggle" size="large" >Toggle page backgrounds</fig-button>
+    </fig-field>
+    
+    <fig-field>
+      <fig-switch id="current-page-only" label="Apply only to current page"></fig-switch>
+    </fig-field>
+
+    <hr>
+
+    <fig-field direction="vertical">
+      <fieldset>
+        <legend>Colors</legend>
+        <label>
+          <span>Light</span>
+          <fig-input-color
+            value="#F5F5F5"
+            text="true"
+            id="light-color"
+            ></fig-input-color>
+        </label>
+        <label>
+          <span>Dark</span>
+          <fig-input-color
+            value="#1E1E1E"
+            text="true"
+            id="dark-color"
+            ></fig-input-color>
+        </label>
+      </fieldset>
+    </fig-field>
+
+    <fig-field>
+      <fig-button id="reset" variant="secondary">Reset to defaults</fig-button>
+    </fig-field>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
