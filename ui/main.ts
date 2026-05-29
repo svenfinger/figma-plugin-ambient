@@ -27,20 +27,22 @@ async function bootstrap(): Promise<void> {
 
   await Promise.all([
     customElements.whenDefined("fig-button"),
-    customElements.whenDefined("fig-checkbox"),
+    customElements.whenDefined("fig-switch"),
     customElements.whenDefined("fig-input-color"),
     customElements.whenDefined("fig-field"),
   ]);
 
-  const lightColor = document.getElementById("light-color");
-  const darkColor = document.getElementById("dark-color");
-  const currentPageOnly = document.getElementById("current-page-only");
-  const toggle = document.getElementById("toggle");
-  const reset = document.getElementById("reset");
-
-  if (!lightColor || !darkColor || !currentPageOnly || !toggle || !reset) {
-    throw new Error("Ambient UI: missing required elements");
+  function requireElement(id: string): HTMLElement {
+    const el = document.getElementById(id);
+    if (!el) throw new Error(`Ambient UI: missing required element #${id}`);
+    return el;
   }
+
+  const lightColor = requireElement("light-color");
+  const darkColor = requireElement("dark-color");
+  const currentPageOnly = requireElement("current-page-only");
+  const toggle = requireElement("toggle");
+  const reset = requireElement("reset");
 
   function saveColors(): void {
     parent.postMessage(

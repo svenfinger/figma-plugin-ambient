@@ -12,7 +12,7 @@ A Figma plugin that toggles page background colors between light and dark mode w
 
 ## Usage
 
-The plugin exposes two commands under **Plugins → Page Background Toggle**:
+The plugin exposes two commands under **Plugins → Ambient**:
 
 | Command | What it does |
 | --- | --- |

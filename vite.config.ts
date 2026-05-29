@@ -13,7 +13,7 @@ export default defineConfig({
     rollupOptions: {
       treeshake: {
         moduleSideEffects(id) {
-          if (id.includes("@rogieking/figui3")) return true;
+          return id.includes("@rogieking/figui3");
         },
       },
     },
