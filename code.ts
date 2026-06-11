@@ -88,7 +88,6 @@ function runSettings(): void {
 
     if (msg.type !== "toggle") return;
 
-    await figma.clientStorage.setAsync("currentPageOnly", msg.currentPageOnly);
     await toggleBackground(msg.currentPageOnly);
   };
 }

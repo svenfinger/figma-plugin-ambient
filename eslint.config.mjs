@@ -8,7 +8,7 @@ export default defineConfig(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    ignores: ['code.js', 'dist/**', 'eslint.config.mjs', 'vite.config.ts', '**/*.js'],
+    ignores: ['dist/**', 'vite.config.ts', '**/*.js'],
   },
   {
     files: ['code.ts'],

@@ -18,8 +18,12 @@ function getColor(el: HTMLElement): string {
 }
 
 function setColor(el: HTMLElement, hex: string): void {
-  if ("value" in el) (el as { value: string }).value = hex;
+  // FigUI3's color component skips re-rendering when the value is unchanged, so
+  // write a throwaway value first to force it to pick up the real one.
+  const placeholder = hex.toUpperCase() === "#000000" ? "#FFFFFF" : "#000000";
+  el.setAttribute("value", placeholder);
   el.setAttribute("value", hex);
+  if ("value" in el) (el as { value: string }).value = hex;
 }
 
 async function bootstrap(): Promise<void> {
